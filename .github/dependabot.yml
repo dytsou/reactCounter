@@ -1,0 +1,46 @@
+version: 2
+updates:
+  # Enable version updates for npm
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "dytsou"
+    assignees:
+      - "dytsou"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "automated"
+    ignore:
+      # Ignore major version updates for react-scripts to avoid breaking changes
+      - dependency-name: "react-scripts"
+        update-types: ["version-update:semver-major"]
+      # Ignore webpack-dev-server updates due to compatibility issues
+      - dependency-name: "webpack-dev-server"
+        update-types: ["version-update:semver-major"]
+    groups:
+      # Group React-related updates
+      react:
+        patterns:
+          - "react*"
+          - "@testing-library/*"
+        update-types:
+          - "minor"
+          - "patch"
+      # Group development dependencies
+      dev-dependencies:
+        patterns:
+          - "eslint*"
+          - "prettier*"
+          - "tailwindcss*"
+        update-types:
+          - "minor"
+          - "patch"
