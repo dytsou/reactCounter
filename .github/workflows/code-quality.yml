@@ -31,12 +31,12 @@ jobs:
       run: pnpm install --frozen-lockfile
       
     - name: Run ESLint
-      run: pnpm run lint
+      run: pnpm run lint:ci
       
     - name: Check code formatting
       run: |
         # Check if there are any formatting issues
-        if ! pnpm run lint --quiet; then
+        if pnpm run lint 2>&1 | grep -q "error\|Error\|ERROR"; then
           echo "❌ Code formatting issues found. Run 'pnpm run lint:fix' to fix them."
           exit 1
         else

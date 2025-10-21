@@ -21,6 +21,7 @@
     "postinstall": "patch-package",
     "lint": "npx eslint src --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "npx eslint src --ext .js,.jsx,.ts,.tsx --fix",
+    "lint:ci": "npx eslint src --ext .js,.jsx,.ts,.tsx --max-warnings 0",
     "test:ci": "react-scripts test --coverage --watchAll=false",
     "test:watch": "react-scripts test --watchAll=false",
     "analyze": "npm run build && npx serve -s build",
