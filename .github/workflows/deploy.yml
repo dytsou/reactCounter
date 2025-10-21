@@ -56,6 +56,9 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     
     permissions:
       contents: read
@@ -81,4 +84,5 @@ jobs:
         path: build/
         
     - name: Deploy to GitHub Pages
+      id: deployment
       uses: actions/deploy-pages@v3
