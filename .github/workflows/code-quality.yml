@@ -78,39 +78,88 @@ jobs:
         # Check for large files
         find build -type f -size +1M -exec echo "Large file: {}" \;
         
+    - name: Generate analysis report
+      if: github.event_name == 'pull_request'
+      run: |
+        # Get build size
+        BUILD_SIZE=$(du -sh build | cut -f1)
+        
+        # Check for large files
+        LARGE_FILES=$(find build -type f -size +1M 2>/dev/null || echo "")
+        
+        # Create analysis report
+        cat > analysis_report.md << EOF
+        ## 📊 Code Quality Analysis
+        
+        **Build Size:** $BUILD_SIZE
+        
+        EOF
+        
+        if [ -n "$LARGE_FILES" ]; then
+          echo "**⚠️ Large Files Detected:**" >> analysis_report.md
+          echo '```' >> analysis_report.md
+          echo "$LARGE_FILES" >> analysis_report.md
+          echo '```' >> analysis_report.md
+          echo "" >> analysis_report.md
+        else
+          echo "**✅ No large files detected**" >> analysis_report.md
+          echo "" >> analysis_report.md
+        fi
+        
+        cat >> analysis_report.md << EOF
+        **Quality Checks:**
+        - ✅ ESLint passed
+        - ✅ Build successful
+        - ✅ Code formatting correct
+        
+        *This analysis was generated automatically by the CI pipeline.*
+        EOF
+        
+        # Display the report
+        cat analysis_report.md
+        
     - name: Comment PR with analysis
       if: github.event_name == 'pull_request'
       uses: actions/github-script@v7
       with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const fs = require('fs');
-          const path = require('path');
           
-          // Get build size
-          const buildSize = require('child_process').execSync('du -sh build | cut -f1', { encoding: 'utf8' }).trim();
-          
-          // Check for large files
-          const largeFiles = require('child_process').execSync('find build -type f -size +1M', { encoding: 'utf8' });
-          
-          let body = `## 📊 Code Quality Analysis\n\n`;
-          body += `**Build Size:** ${buildSize}\n\n`;
-          
-          if (largeFiles.trim()) {
-            body += `**⚠️ Large Files Detected:**\n\`\`\`\n${largeFiles}\`\`\`\n\n`;
-          } else {
-            body += `**✅ No large files detected**\n\n`;
+          try {
+            // Read the analysis report
+            const report = fs.readFileSync('analysis_report.md', 'utf8');
+            
+            // Debug information
+            console.log('Repository:', context.repo.owner, context.repo.repo);
+            console.log('Issue number:', context.issue.number);
+            console.log('Event name:', context.eventName);
+            console.log('Report content:', report.substring(0, 200) + '...');
+            
+            // Try to create comment
+            const result = await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: report
+            });
+            
+            console.log('Comment created successfully:', result.data.html_url);
+            
+          } catch (error) {
+            console.error('Error creating comment:', error);
+            console.error('Error status:', error.status);
+            console.error('Error message:', error.message);
+            
+            // Log the report content as fallback
+            try {
+              const report = fs.readFileSync('analysis_report.md', 'utf8');
+              console.log('Analysis Report (fallback):');
+              console.log(report);
+            } catch (readError) {
+              console.log('Could not read analysis report');
+            }
+            
+            // Don't fail the workflow
+            process.exit(0);
           }
-          
-          body += `**Quality Checks:**\n`;
-          body += `- ✅ ESLint passed\n`;
-          body += `- ✅ Build successful\n`;
-          body += `- ✅ Code formatting correct\n\n`;
-          
-          body += `*This analysis was generated automatically by the CI pipeline.*`;
-          
-          await github.rest.issues.createComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.issue.number,
-            body: body
-          });
