@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Test
 
 on:
   push:
@@ -43,42 +43,5 @@ jobs:
     - name: Run tests
       run: pnpm test:ci
       
-    - name: Build project
-      run: pnpm build
-      
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: build-files
-        path: build/
-
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
-    
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-      
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Download build artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: build-files
-        path: build/
-        
-    - name: Setup Pages
-      uses: actions/configure-pages@v3
-      
-    - name: Upload to GitHub Pages
-      uses: actions/upload-pages-artifact@v2
-      with:
-        path: build/
-        
-    - name: Deploy to GitHub Pages
-      uses: actions/deploy-pages@v2
+    - name: Run linting
+      run: pnpm lint:ci

@@ -79,7 +79,49 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/a
 
 ### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+This project is configured for automatic deployment to GitHub Pages using GitHub Actions.
+
+#### GitHub Pages Deployment
+
+The project includes GitHub Actions workflows that automatically:
+
+1. **Test**: Run tests and linting on every push and pull request
+2. **Deploy**: Build and deploy to GitHub Pages on pushes to `master` or `main` branch
+
+#### Setup GitHub Pages
+
+To enable GitHub Pages deployment:
+
+1. Go to your repository settings on GitHub
+2. Navigate to "Pages" in the left sidebar
+3. Under "Source", select "GitHub Actions"
+4. The deployment will happen automatically when you push to the main branch
+
+#### Manual Deployment
+
+You can also deploy manually:
+
+```bash
+# Build the project
+pnpm build
+
+# The build folder contains the production-ready files
+# You can deploy the contents of the build folder to any static hosting service
+```
+
+#### Local Testing
+
+To test the production build locally:
+
+```bash
+# Build the project
+pnpm build
+
+# Serve the build folder locally
+pnpm analyze
+```
+
+This will start a local server serving the production build at `http://localhost:3000`.
 
 ### `pnpm run build` fails to minify
 
