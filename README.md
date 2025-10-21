@@ -77,29 +77,31 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/m
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
+### GitHub Actions
+
+This project includes several GitHub Actions workflows for automated testing and code quality:
+
+#### Available Workflows
+
+1. **CI Pipeline** (`ci.yml`): Runs tests, linting, and builds on multiple Node.js versions
+2. **Security Audit** (`security.yml`): Runs security audits and vulnerability scanning
+3. **Dependency Updates** (`dependency-update.yml`): Automated dependency management
+4. **Release Management** (`release.yml`): Handles versioning and releases
+5. **Deploy to GitHub Pages** (`deploy-gh-pages.yml`): Deploys the build to GitHub Pages
+
+#### Workflow Features
+
+- **Multi-version Testing**: Tests on Node.js 18.x and 20.x
+- **Security Audits**: Automated vulnerability scanning
+- **Coverage Reports**: Code coverage tracking with Codecov integration
+- **Automated Deployment**: Builds and deploys to GitHub Pages
+- **Dependency Management**: Automated dependency updates and security patches
+
 ### Deployment
-
-This project is configured for automatic deployment to GitHub Pages using GitHub Actions.
-
-#### GitHub Pages Deployment
-
-The project includes GitHub Actions workflows that automatically:
-
-1. **Test**: Run tests and linting on every push and pull request
-2. **Deploy**: Build and deploy to GitHub Pages on pushes to `master` or `main` branch
-
-#### Setup GitHub Pages
-
-To enable GitHub Pages deployment:
-
-1. Go to your repository settings on GitHub
-2. Navigate to "Pages" in the left sidebar
-3. Under "Source", select "GitHub Actions"
-4. The deployment will happen automatically when you push to the main branch
 
 #### Manual Deployment
 
-You can also deploy manually:
+You can deploy the application manually:
 
 ```bash
 # Build the project
