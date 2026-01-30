@@ -12,8 +12,14 @@ const Counter = () => {
       {count < 10 && (
         <div
           className="chevron chevron-up"
-          onClick={() => {
-            setCount(count + 1);
+          role="button"
+          tabIndex={0}
+          onClick={() => setCount(count + 1)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setCount((c) => c + 1);
+            }
           }}
         />
       )}
@@ -23,8 +29,14 @@ const Counter = () => {
       {count > 0 && (
         <div
           className="chevron chevron-down"
-          onClick={() => {
-            setCount(count - 1);
+          role="button"
+          tabIndex={0}
+          onClick={() => setCount(count - 1)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setCount((c) => c - 1);
+            }
           }}
         />
       )}
