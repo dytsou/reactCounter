@@ -8,7 +8,6 @@ module.exports = [
   js.configs.recommended,
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat["jsx-runtime"],
-  reactHooks.configs["recommended-latest"],
   jsxA11y.flatConfigs.recommended,
   {
     files: ["src/**/*.{js,jsx,ts,tsx}"],
@@ -31,6 +30,11 @@ module.exports = [
       "no-console": "warn",
       "no-unused-vars": "warn",
       "prefer-const": "error",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+    },
+    plugins: {
+      "react-hooks": reactHooks,
     },
   },
 ];
